@@ -1,18 +1,18 @@
 // db.js
 const mongoose = require('mongoose');
-const connectURL = "mongodb+srv://GoFoodMern:GoFoodMern@gofoodmern.6vv8a.mongodb.net/?retryWrites=true&w=majority&appName=GoFoodMern";
+const connectURL = "mongodb+srv://GoFoodMern:GoFoodMern@gofoodmern.6vv8a.mongodb.net/GoFoodMern?retryWrites=true&w=majority&tls=true&tlsInsecure=true";
 
-async function connectToDatabase() {
+const mongoDB = async () => {
   try {
-    await mongoose.connect(connectURL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("Connected to DB");
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-    process.exit(1); // Exit the application if the connection fails
-  }
-}
+    await mongoose.connect(connectURL); // Removed deprecated options
+    console.log("Connected to MongoDB");
 
-module.exports = connectToDatabase;
+    const fetched_data = mongoose.connection.db.collection("food_items");
+    const result = await fetched_data.find({}).toArray();
+    console.log(result);
+  } catch (err) {
+    console.error("Error connecting to MongoDB:", err);
+  }
+};
+
+module.exports = mongoDB;
