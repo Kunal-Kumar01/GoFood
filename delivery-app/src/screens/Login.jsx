@@ -1,8 +1,9 @@
 import React from 'react'
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
+  const navigate = useNavigate();
   const [crendentials, setCrendentials] = useState({
     email: '',
     password: ''
@@ -10,7 +11,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/createUser", {
+    const response = await fetch("http://localhost:5000/api/Login", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -24,7 +25,10 @@ export default function Login() {
     console.log(json);
 
     if (json.success) {
-      console.log('User Created Successfully');
+      localStorage.setItem('authToken', json.authToken);
+      console.log(localStorage.getItem('authToken'));
+
+      navigate('/');
     } else {
       console.log('User Creation Failed');
     }
@@ -45,11 +49,6 @@ export default function Login() {
                               <label htmlFor="password" className="form-label">Password</label>
                               <input type="password" className="form-control" id="exampleInputPassword1" name = 'password' onChange={onChange} value={crendentials.password}  />
                           </div>
-                          <div>
-                              <label htmlFor="location" className="form-label">Location</label>
-                              <input type="text" className="form-control" name='location' onChange={onChange} value={crendentials.location} />
-                          </div>
-                          
                           <button type="submit" className="btn btn-success m-3">Submit</button>
                           <Link className='btn m-3 btn-danger' to="/SignUp">Make new Account</Link>
 
