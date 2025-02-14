@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
 
 app.use('/api', require('./Routes/createUser'));
 
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
